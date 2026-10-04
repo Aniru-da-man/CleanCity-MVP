@@ -1,0 +1,36 @@
+# Render Blueprint configuration for CleanCity AI
+# https://render.com/docs/blueprint-spec
+
+services:
+  # 1. CleanCity AI - Frontend Web App (Static Site)
+  - type: web
+    name: cleancity-ai-web
+    runtime: static
+    buildCommand: pnpm install --no-frozen-lockfile && pnpm --filter @workspace/cleancity-ai run build
+    staticPublishPath: ./artifacts/cleancity-ai/dist/public
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: BASE_PATH
+        value: /
+      - key: PORT
+        value: 3000
+
+  # 2. CleanCity AI - API Server (Node.js Web Service)
+  - type: web
+    name: cleancity-ai-api
+    runtime: node
+    plan: free
+    buildCommand: pnpm install --no-frozen-lockfile && pnpm --filter @workspace/api-server run build
+    startCommand: pnpm --filter @workspace/api-server run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: VISION_FALLBACK_MODE
+        value: simulation
