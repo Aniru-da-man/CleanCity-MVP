@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "CleanCity AI"
+version = "1.0.0"
+id = "artifacts/cleancity-ai"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24068
+
+[services.development]
+run = "pnpm --filter @workspace/cleancity-ai run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/cleancity-ai", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/cleancity-ai/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24068"
+BASE_PATH = "/"
