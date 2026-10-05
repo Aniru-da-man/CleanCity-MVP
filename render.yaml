@@ -19,6 +19,8 @@ services:
         value: /
       - key: PORT
         value: 3000
+      - key: VITE_API_URL
+        value: https://cleancity-ai-api.onrender.com
 
   # 2. CleanCity AI - API Server (Node.js Web Service)
   - type: web
